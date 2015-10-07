@@ -1,0 +1,30 @@
+{
+  "name": "brobbot-giphy",
+  "version": "0.1.0",
+  "description": "giphy plugin for brobbot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b3nj4m/brobbot-giphy.git"
+  },
+  "keywords": [
+    "giphy",
+    "brobbot"
+  ],
+  "author": "Ben Robbins <ben.robbins@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/b3nj4m/brobbot-giphy/issues"
+  },
+  "homepage": "https://github.com/b3nj4m/brobbot-giphy#readme",
+  "peerDependencies": {
+    "brobbot": "^6.0.0"
+  },
+  "dependencies": {
+    "giphy-api": "^1.0.8",
+    "q": "^1.4.1"
+  }
+}
