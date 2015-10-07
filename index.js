@@ -2,12 +2,13 @@ var giphy = require('giphy-api');
 var Q = require('q');
 
 var API_KEY = process.env.BROBBOT_GIPHY_API_KEY;
-var USE_MP4 = process.env.BROBBOT_GIPHY_USE_MP4 !== 'false';
+var FORMAT = process.env.BROBBOT_GIPHY_FORMAT || 'gif';
+var RATING = process.env.BROBBOT_GIPHY_RATING || 'pg-13';
 
 var api = giphy(API_KEY);
 
 function search (text, rating) {
-  return Q.ninvoke(api, 'search', {q: text, rating: rating || 'pg-13', fmt: 'json'});
+  return Q.ninvoke(api, 'search', {q: text, rating: rating || RATING, fmt: 'json'});
 }
 
 function randomItem (list) {
@@ -19,24 +20,34 @@ function mp4 (data) {
 }
 
 function gif (data) {
-  return data.images.fixed_height.gif;
+  return data.images.fixed_height.url;
 }
+
+function webp (data) {
+  return data.images.fixed_height.webp;
+}
+
+var formats = new Map([
+  ['mp4', mp4],
+  ['gif', gif],
+  ['webp', webp]
+]);
 
 module.exports = function (robot) {
   robot.helpCommand('giphy `search`', 'search giphy for an animation tagged with `search`');
   robot.helpCommand('giphy-unsafe `search`', 'search giphy for an animation with any rating, tagged with `search`');
 
-  var url = USE_MP4 ? mp4 : gif;
+  var format = formats.has(FORMAT) ? formats.get(FORMAT) : formats.get('gif');
 
   robot.respond(/^giphy (.*)/, function (msg) {
     return search(msg.match[1]).then(function (response) {
-      return msg.send(url(randomItem(response.data)));
+      return msg.send(format(randomItem(response.data)));
     });
   });
 
   robot.respond(/^giphy-unsafe (.*)/, function (msg) {
     return search(msg.match[1], 'r').then(function (response) {
-      return msg.send(url(randomItem(response.data)));
+      return msg.send(format(randomItem(response.data)));
     });
   });
 };
