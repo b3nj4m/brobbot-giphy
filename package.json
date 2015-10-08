@@ -1,6 +1,6 @@
 {
   "name": "brobbot-giphy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "giphy plugin for brobbot",
   "main": "index.js",
   "scripts": {
