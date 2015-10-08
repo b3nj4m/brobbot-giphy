@@ -8,7 +8,16 @@ var RATING = process.env.BROBBOT_GIPHY_RATING || 'pg-13';
 var api = giphy(API_KEY);
 
 function search (text, rating) {
-  return Q.ninvoke(api, 'search', {q: text, rating: rating || RATING, fmt: 'json'});
+  return Q.ninvoke(api, 'search', {q: text, rating: rating, fmt: 'json'});
+}
+
+function searchRandomItem (text, rating, format, msg) {
+  return search(text, rating).then(function (response) {
+    return msg.send(format(randomItem(response.data)));
+  }).fail(function (e) {
+    console.error(e);
+    msg.send('No gif results');
+  });
 }
 
 function randomItem (list) {
@@ -40,14 +49,10 @@ module.exports = function (robot) {
   var format = formats.has(FORMAT) ? formats.get(FORMAT) : formats.get('gif');
 
   robot.respond(/^giphy (.*)/, function (msg) {
-    return search(msg.match[1]).then(function (response) {
-      return msg.send(format(randomItem(response.data)));
-    });
+    return searchRandomItem(msg.match[1], RATING, format, msg);
   });
 
   robot.respond(/^giphy-unsafe (.*)/, function (msg) {
-    return search(msg.match[1], 'r').then(function (response) {
-      return msg.send(format(randomItem(response.data)));
-    });
+    return searchRandomItem(msg.match[1], 'r', format, msg);
   });
 };
