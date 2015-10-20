@@ -43,8 +43,8 @@ var formats = new Map([
 ]);
 
 module.exports = function (robot) {
-  robot.helpCommand('giphy `search`', 'search giphy for an animation tagged with `search`');
-  robot.helpCommand('giphy-unsafe `search`', 'search giphy for an animation with any rating, tagged with `search`');
+  robot.helpCommand('brobbot giphy `search`', 'search giphy for an animation tagged with `search`');
+  robot.helpCommand('brobbot giphy-unsafe `search`', 'search giphy for an animation with any rating, tagged with `search`');
 
   var format = formats.has(FORMAT) ? formats.get(FORMAT) : formats.get('gif');
 
